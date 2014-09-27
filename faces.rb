@@ -6,5 +6,5 @@ get '/' do
 end
 
 get '/faces' do
-  json Dir.glob(File.join(settings.public_folder, "*.gif"))
+  json Dir.entries(settings.public_folder).select {|f| f.end_with? '.gif'}
 end

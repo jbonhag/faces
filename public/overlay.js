@@ -1,24 +1,20 @@
-function padToFour(number) {
-  if (number<=9999) { number = ("000"+number).slice(-4); }
-  return number;
-}
+var request = new XMLHttpRequest();
+request.onreadystatechange = runFaces;
+request.open('GET', '/faces');
+request.send();
+
+var image = new Image();
+document.body.appendChild(image);
 
 var i = 0;
-var interval = 50;
 
-var loadImageInterval = setInterval(function() {
-  var img = new Image();
-  img.src = "face_"+ padToFour(i) +".jpg";
-  document.body.appendChild(img);
-  console.log(img.src);
-  i++;
-}, interval);
-
-console.log(loadImageInterval);
-
-setInterval(function() {
-  if (i > 1000) {
-    clearInterval(loadImageInterval);
+function runFaces() {
+  if (request.readyState === 4 && request.status === 200) {
+    var faces = JSON.parse(request.responseText);
+    setInterval(function() {
+      image.src = faces[i];
+      i++;
+    }, 100);
   }
-}, interval);
+}
 
